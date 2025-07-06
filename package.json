@@ -1,0 +1,26 @@
+{
+  "name": "hey-bible-client",
+  "version": "1.0.0",
+  "description": "Hey Bible App TypeScript client and examples",
+  "main": "typescript/dist/index.js",
+  "scripts": {
+    "gen:ts": "npx --yes @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./typescript --additional-properties=typescriptThreePlus=true,withInterfaces=true,npmName=hey-bible-client",
+    "postgen:ts": "sed -i '' 's/GIT_USER_ID/Hey-Bible/g' typescript/package.json && sed -i '' 's/GIT_REPO_ID/hey-bible-client/g' typescript/package.json",
+    "build": "cd typescript && npm install && npm run build",
+    "test": "cd typescript && npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "bible",
+    "api",
+    "client",
+    "typescript",
+    "openapi"
+  ],
+  "author": "Hey Bible App",
+  "license": "MIT"
+} 

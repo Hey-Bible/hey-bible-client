@@ -1,0 +1,379 @@
+openapi: 3.0.0
+info:
+  title: Hey Bible App API
+  description: Public API for accessing Bible app data
+  version: 1.0.0
+servers:
+  - url: https://api.heybible.app
+    description: Production server
+tags:
+  - name: HeyBible
+    description: Hey Bible App API endpoints for verses, notes, and images
+paths:
+  /api/images:
+    get:
+      tags:
+        - HeyBible
+      summary: Get user's images
+      description: Retrieve a list of images with their associated verses, or a specific image if ID is provided
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Specific image ID to retrieve (returns signed URL)
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of images to return (ignored if ID is specified)
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of images to skip (ignored if ID is specified)
+      responses:
+        '200':
+          description: Images retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: Single image response (when ID is specified)
+                    properties:
+                      image:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          verse_id:
+                            type: integer
+                          storage_path:
+                            type: string
+                          signed_url:
+                            type: string
+                            nullable: true
+                            description: Pre-signed URL to access the image (24 hour expiry)
+                          created_at:
+                            type: string
+                            format: date-time
+                          prompt:
+                            type: string
+                            nullable: true
+                          size:
+                            type: string
+                            nullable: true
+                          verses:
+                            type: object
+                            description: Associated verse information
+                  - type: object
+                    description: Multiple images response (when ID is not specified)
+                    properties:
+                      images:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            verse_id:
+                              type: integer
+                            storage_path:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            prompt:
+                              type: string
+                              nullable: true
+                            size:
+                              type: string
+                              nullable: true
+                            verses:
+                              type: object
+                              description: Associated verse information
+                        description: Array of images (no signed URLs for performance)
+                      count:
+                        type: integer
+                        description: Number of images returned
+                      offset:
+                        type: integer
+                        description: Current offset
+                      limit:
+                        type: integer
+                        description: Current limit
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '404':
+          description: Not found - image with specified ID not found
+        '500':
+          description: Internal server error
+  /api/notes:
+    get:
+      tags:
+        - HeyBible
+      summary: Get notes
+      description: Retrieve all notes with their associated verses for the user, or a specific note if ID is provided
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Specific note ID to retrieve
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of notes to return (ignored if ID is specified)
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of notes to skip (ignored if ID is specified)
+      responses:
+        '200':
+          description: Notes retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: Single note response (when ID is specified)
+                    properties:
+                      note:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          verse_id:
+                            type: integer
+                          content:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          last_modified:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          user_id:
+                            type: string
+                          verses:
+                            type: object
+                            description: Associated verse information
+                            properties:
+                              id:
+                                type: integer
+                              bible_id:
+                                type: string
+                              book:
+                                type: string
+                              chapter:
+                                type: integer
+                              start_verse:
+                                type: integer
+                              end_verse:
+                                type: integer
+                              content:
+                                type: string
+                              created_at:
+                                type: string
+                                format: date-time
+                              is_favorite:
+                                type: boolean
+                  - type: object
+                    description: Multiple notes response (when ID is not specified)
+                    properties:
+                      notes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            verse_id:
+                              type: integer
+                            content:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            last_modified:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            user_id:
+                              type: string
+                            verses:
+                              type: object
+                              description: Associated verse information
+                      count:
+                        type: integer
+                        description: Number of notes returned
+                      offset:
+                        type: integer
+                        description: Current offset
+                      limit:
+                        type: integer
+                        description: Current limit
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '404':
+          description: Not found - note with specified ID not found
+        '500':
+          description: Internal server error
+  /api/verses:
+    get:
+      tags:
+        - HeyBible
+      summary: Get verses
+      description: Retrieve all verses for the user, or a specific verse if ID is provided
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Specific verse ID to retrieve
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of verses to return (ignored if ID is specified)
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of verses to skip (ignored if ID is specified)
+      responses:
+        '200':
+          description: Verses retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: Single verse response (when ID is specified)
+                    properties:
+                      verse:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          bible_id:
+                            type: string
+                          book:
+                            type: string
+                          chapter:
+                            type: integer
+                          start_verse:
+                            type: integer
+                          end_verse:
+                            type: integer
+                          content:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          last_updated:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          is_favorite:
+                            type: boolean
+                          notes:
+                            type: array
+                            items:
+                              type: object
+                              description: Associated notes
+                          images:
+                            type: array
+                            items:
+                              type: object
+                              description: Associated images
+                  - type: object
+                    description: Multiple verses response (when ID is not specified)
+                    properties:
+                      verses:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            bible_id:
+                              type: string
+                            book:
+                              type: string
+                            chapter:
+                              type: integer
+                            start_verse:
+                              type: integer
+                            end_verse:
+                              type: integer
+                            content:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            last_updated:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            is_favorite:
+                              type: boolean
+                      count:
+                        type: integer
+                        description: Number of verses returned
+                      offset:
+                        type: integer
+                        description: Current offset
+                      limit:
+                        type: integer
+                        description: Current limit
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '404':
+          description: Not found - verse with specified ID not found
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Hey-Bible-Api-Key
+security:
+  - ApiKeyAuth: []
