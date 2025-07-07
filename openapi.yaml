@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Hey Bible App API
   description: Public API for accessing Bible app data
-  version: 1.0.2
+  version: 1.0.3
 servers:
   - url: https://api.heybible.app
     description: Production server
@@ -46,71 +46,30 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: object
-                    description: Single image response (when ID is specified)
-                    properties:
-                      images:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          verse_id:
-                            type: integer
-                          storage_path:
-                            type: string
-                          signed_url:
-                            type: string
-                            nullable: true
-                            description: Pre-signed URL to access the image (24 hour expiry)
-                          created_at:
-                            type: string
-                            format: date-time
-                          prompt:
-                            type: string
-                            nullable: true
-                          size:
-                            type: string
-                            nullable: true
-                          verses:
-                            type: object
-                            description: Associated verse information
-                  - type: object
-                    description: Multiple images response (when ID is not specified)
-                    properties:
-                      images:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                            verse_id:
-                              type: integer
-                            storage_path:
-                              type: string
-                            created_at:
-                              type: string
-                              format: date-time
-                            prompt:
-                              type: string
-                              nullable: true
-                            size:
-                              type: string
-                              nullable: true
-                            verses:
-                              type: object
-                              description: Associated verse information
-                        description: Array of images (no signed URLs for performance)
-                      count:
-                        type: integer
-                        description: Number of images returned
-                      offset:
-                        type: integer
-                        description: Current offset
-                      limit:
-                        type: integer
-                        description: Current limit
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        verse_id:
+                          type: integer
+                        user_id:
+                          type: string
+                        storage_path:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                        prompt:
+                          type: string
+                          nullable: true
+                        size:
+                          type: string
+                          nullable: true
         '400':
           description: Bad request
         '401':
@@ -155,88 +114,29 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: object
-                    description: Single note response (when ID is specified)
-                    properties:
-                      notes:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          verse_id:
-                            type: integer
-                          content:
-                            type: string
-                          created_at:
-                            type: string
-                            format: date-time
-                            nullable: true
-                          last_modified:
-                            type: string
-                            format: date-time
-                            nullable: true
-                          user_id:
-                            type: string
-                          verses:
-                            type: object
-                            description: Associated verse information
-                            properties:
-                              id:
-                                type: integer
-                              bible_id:
-                                type: string
-                              book:
-                                type: string
-                              chapter:
-                                type: integer
-                              start_verse:
-                                type: integer
-                              end_verse:
-                                type: integer
-                              content:
-                                type: string
-                              created_at:
-                                type: string
-                                format: date-time
-                              is_favorite:
-                                type: boolean
-                  - type: object
-                    description: Multiple notes response (when ID is not specified)
-                    properties:
-                      notes:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                            verse_id:
-                              type: integer
-                            content:
-                              type: string
-                            created_at:
-                              type: string
-                              format: date-time
-                              nullable: true
-                            last_modified:
-                              type: string
-                              format: date-time
-                              nullable: true
-                            user_id:
-                              type: string
-                            verses:
-                              type: object
-                              description: Associated verse information
-                      count:
-                        type: integer
-                        description: Number of notes returned
-                      offset:
-                        type: integer
-                        description: Current offset
-                      limit:
-                        type: integer
-                        description: Current limit
+                type: object
+                properties:
+                  notes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        verse_id:
+                          type: integer
+                        content:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        last_modified:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        user_id:
+                          type: string
         '400':
           description: Bad request
         '401':
@@ -281,86 +181,80 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: object
-                    description: Single verse response (when ID is specified)
-                    properties:
-                      verses:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          bible_id:
-                            type: string
-                          book:
-                            type: string
-                          chapter:
-                            type: integer
-                          start_verse:
-                            type: integer
-                          end_verse:
-                            type: integer
-                          content:
-                            type: string
-                          created_at:
-                            type: string
-                            format: date-time
-                          last_updated:
-                            type: string
-                            format: date-time
-                            nullable: true
-                          is_favorite:
-                            type: boolean
-                          notes:
-                            type: array
-                            items:
-                              type: object
-                              description: Associated notes
-                          images:
-                            type: array
-                            items:
-                              type: object
-                              description: Associated images
-                  - type: object
-                    description: Multiple verses response (when ID is not specified)
-                    properties:
-                      verses:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                            bible_id:
-                              type: string
-                            book:
-                              type: string
-                            chapter:
-                              type: integer
-                            start_verse:
-                              type: integer
-                            end_verse:
-                              type: integer
-                            content:
-                              type: string
-                            created_at:
-                              type: string
-                              format: date-time
-                            last_updated:
-                              type: string
-                              format: date-time
-                              nullable: true
-                            is_favorite:
-                              type: boolean
-                      count:
-                        type: integer
-                        description: Number of verses returned
-                      offset:
-                        type: integer
-                        description: Current offset
-                      limit:
-                        type: integer
-                        description: Current limit
+                type: object
+                properties:
+                  verses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        user_id:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                        book:
+                          type: string
+                        chapter:
+                          type: integer
+                        start_verse:
+                          type: integer
+                        end_verse:
+                          type: integer
+                        is_favorite:
+                          type: boolean
+                        last_updated:
+                          type: string
+                          format: date-time
+                        content:
+                          type: string
+                        bible_id:
+                          type: string
+                        notes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              verse_id:
+                                type: integer
+                              content:
+                                type: string
+                              created_at:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              last_modified:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              user_id:
+                                type: string
+                        images:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              size:
+                                type: string
+                                nullable: true
+                              prompt:
+                                type: string
+                                nullable: true
+                              user_id:
+                                type: string
+                              verse_id:
+                                type: integer
+                              created_at:
+                                type: string
+                                format: date-time
+                              storage_path:
+                                type: string
         '400':
           description: Bad request
         '401':
