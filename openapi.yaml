@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Hey Bible App API
   description: Public API for accessing Bible app data
-  version: 1.0.3
+  version: 1.0.4
 servers:
   - url: https://api.heybible.app
     description: Production server
@@ -61,6 +61,10 @@ paths:
                           type: string
                         storage_path:
                           type: string
+                        signed_url:
+                          type: string
+                          nullable: true
+                          description: Pre-signed URL to access the image (24 hour expiry, only returned when requesting by ID)
                         created_at:
                           type: string
                           format: date-time
