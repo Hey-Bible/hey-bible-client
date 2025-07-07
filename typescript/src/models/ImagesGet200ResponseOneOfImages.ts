@@ -16,65 +16,71 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ImagesGet200ResponseOneOf1ImagesInner
+ * @interface ImagesGet200ResponseOneOfImages
  */
-export interface ImagesGet200ResponseOneOf1ImagesInner {
+export interface ImagesGet200ResponseOneOfImages {
     /**
      * 
      * @type {number}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     id?: number;
     /**
      * 
      * @type {number}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     verseId?: number;
     /**
      * 
      * @type {string}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     storagePath?: string;
     /**
+     * Pre-signed URL to access the image (24 hour expiry)
+     * @type {string}
+     * @memberof ImagesGet200ResponseOneOfImages
+     */
+    signedUrl?: string | null;
+    /**
      * 
      * @type {Date}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     createdAt?: Date;
     /**
      * 
      * @type {string}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     prompt?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     size?: string | null;
     /**
      * Associated verse information
      * @type {object}
-     * @memberof ImagesGet200ResponseOneOf1ImagesInner
+     * @memberof ImagesGet200ResponseOneOfImages
      */
     verses?: object;
 }
 
 /**
- * Check if a given object implements the ImagesGet200ResponseOneOf1ImagesInner interface.
+ * Check if a given object implements the ImagesGet200ResponseOneOfImages interface.
  */
-export function instanceOfImagesGet200ResponseOneOf1ImagesInner(value: object): value is ImagesGet200ResponseOneOf1ImagesInner {
+export function instanceOfImagesGet200ResponseOneOfImages(value: object): value is ImagesGet200ResponseOneOfImages {
     return true;
 }
 
-export function ImagesGet200ResponseOneOf1ImagesInnerFromJSON(json: any): ImagesGet200ResponseOneOf1ImagesInner {
-    return ImagesGet200ResponseOneOf1ImagesInnerFromJSONTyped(json, false);
+export function ImagesGet200ResponseOneOfImagesFromJSON(json: any): ImagesGet200ResponseOneOfImages {
+    return ImagesGet200ResponseOneOfImagesFromJSONTyped(json, false);
 }
 
-export function ImagesGet200ResponseOneOf1ImagesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ImagesGet200ResponseOneOf1ImagesInner {
+export function ImagesGet200ResponseOneOfImagesFromJSONTyped(json: any, ignoreDiscriminator: boolean): ImagesGet200ResponseOneOfImages {
     if (json == null) {
         return json;
     }
@@ -83,6 +89,7 @@ export function ImagesGet200ResponseOneOf1ImagesInnerFromJSONTyped(json: any, ig
         'id': json['id'] == null ? undefined : json['id'],
         'verseId': json['verse_id'] == null ? undefined : json['verse_id'],
         'storagePath': json['storage_path'] == null ? undefined : json['storage_path'],
+        'signedUrl': json['signed_url'] == null ? undefined : json['signed_url'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
         'size': json['size'] == null ? undefined : json['size'],
@@ -90,11 +97,11 @@ export function ImagesGet200ResponseOneOf1ImagesInnerFromJSONTyped(json: any, ig
     };
 }
 
-export function ImagesGet200ResponseOneOf1ImagesInnerToJSON(json: any): ImagesGet200ResponseOneOf1ImagesInner {
-    return ImagesGet200ResponseOneOf1ImagesInnerToJSONTyped(json, false);
+export function ImagesGet200ResponseOneOfImagesToJSON(json: any): ImagesGet200ResponseOneOfImages {
+    return ImagesGet200ResponseOneOfImagesToJSONTyped(json, false);
 }
 
-export function ImagesGet200ResponseOneOf1ImagesInnerToJSONTyped(value?: ImagesGet200ResponseOneOf1ImagesInner | null, ignoreDiscriminator: boolean = false): any {
+export function ImagesGet200ResponseOneOfImagesToJSONTyped(value?: ImagesGet200ResponseOneOfImages | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -104,6 +111,7 @@ export function ImagesGet200ResponseOneOf1ImagesInnerToJSONTyped(value?: ImagesG
         'id': value['id'],
         'verse_id': value['verseId'],
         'storage_path': value['storagePath'],
+        'signed_url': value['signedUrl'],
         'created_at': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'prompt': value['prompt'],
         'size': value['size'],

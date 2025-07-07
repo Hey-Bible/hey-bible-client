@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Hey Bible App API
   description: Public API for accessing Bible app data
-  version: 1.0.1
+  version: 1.0.2
 servers:
   - url: https://api.heybible.app
     description: Production server
@@ -50,7 +50,7 @@ paths:
                   - type: object
                     description: Single image response (when ID is specified)
                     properties:
-                      image:
+                      images:
                         type: object
                         properties:
                           id:
@@ -159,7 +159,7 @@ paths:
                   - type: object
                     description: Single note response (when ID is specified)
                     properties:
-                      note:
+                      notes:
                         type: object
                         properties:
                           id:
@@ -285,7 +285,7 @@ paths:
                   - type: object
                     description: Single verse response (when ID is specified)
                     properties:
-                      verse:
+                      verses:
                         type: object
                         properties:
                           id:

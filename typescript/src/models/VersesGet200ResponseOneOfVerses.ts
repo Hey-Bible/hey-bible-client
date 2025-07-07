@@ -16,83 +16,95 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface VersesGet200ResponseOneOf1VersesInner
+ * @interface VersesGet200ResponseOneOfVerses
  */
-export interface VersesGet200ResponseOneOf1VersesInner {
+export interface VersesGet200ResponseOneOfVerses {
     /**
      * 
      * @type {number}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     id?: number;
     /**
      * 
      * @type {string}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     bibleId?: string;
     /**
      * 
      * @type {string}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     book?: string;
     /**
      * 
      * @type {number}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     chapter?: number;
     /**
      * 
      * @type {number}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     startVerse?: number;
     /**
      * 
      * @type {number}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     endVerse?: number;
     /**
      * 
      * @type {string}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     content?: string;
     /**
      * 
      * @type {Date}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     createdAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     lastUpdated?: Date | null;
     /**
      * 
      * @type {boolean}
-     * @memberof VersesGet200ResponseOneOf1VersesInner
+     * @memberof VersesGet200ResponseOneOfVerses
      */
     isFavorite?: boolean;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof VersesGet200ResponseOneOfVerses
+     */
+    notes?: Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof VersesGet200ResponseOneOfVerses
+     */
+    images?: Array<object>;
 }
 
 /**
- * Check if a given object implements the VersesGet200ResponseOneOf1VersesInner interface.
+ * Check if a given object implements the VersesGet200ResponseOneOfVerses interface.
  */
-export function instanceOfVersesGet200ResponseOneOf1VersesInner(value: object): value is VersesGet200ResponseOneOf1VersesInner {
+export function instanceOfVersesGet200ResponseOneOfVerses(value: object): value is VersesGet200ResponseOneOfVerses {
     return true;
 }
 
-export function VersesGet200ResponseOneOf1VersesInnerFromJSON(json: any): VersesGet200ResponseOneOf1VersesInner {
-    return VersesGet200ResponseOneOf1VersesInnerFromJSONTyped(json, false);
+export function VersesGet200ResponseOneOfVersesFromJSON(json: any): VersesGet200ResponseOneOfVerses {
+    return VersesGet200ResponseOneOfVersesFromJSONTyped(json, false);
 }
 
-export function VersesGet200ResponseOneOf1VersesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): VersesGet200ResponseOneOf1VersesInner {
+export function VersesGet200ResponseOneOfVersesFromJSONTyped(json: any, ignoreDiscriminator: boolean): VersesGet200ResponseOneOfVerses {
     if (json == null) {
         return json;
     }
@@ -108,14 +120,16 @@ export function VersesGet200ResponseOneOf1VersesInnerFromJSONTyped(json: any, ig
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'lastUpdated': json['last_updated'] == null ? undefined : (new Date(json['last_updated'])),
         'isFavorite': json['is_favorite'] == null ? undefined : json['is_favorite'],
+        'notes': json['notes'] == null ? undefined : json['notes'],
+        'images': json['images'] == null ? undefined : json['images'],
     };
 }
 
-export function VersesGet200ResponseOneOf1VersesInnerToJSON(json: any): VersesGet200ResponseOneOf1VersesInner {
-    return VersesGet200ResponseOneOf1VersesInnerToJSONTyped(json, false);
+export function VersesGet200ResponseOneOfVersesToJSON(json: any): VersesGet200ResponseOneOfVerses {
+    return VersesGet200ResponseOneOfVersesToJSONTyped(json, false);
 }
 
-export function VersesGet200ResponseOneOf1VersesInnerToJSONTyped(value?: VersesGet200ResponseOneOf1VersesInner | null, ignoreDiscriminator: boolean = false): any {
+export function VersesGet200ResponseOneOfVersesToJSONTyped(value?: VersesGet200ResponseOneOfVerses | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -132,6 +146,8 @@ export function VersesGet200ResponseOneOf1VersesInnerToJSONTyped(value?: VersesG
         'created_at': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'last_updated': value['lastUpdated'] === null ? null : ((value['lastUpdated'] as any)?.toISOString()),
         'is_favorite': value['isFavorite'],
+        'notes': value['notes'],
+        'images': value['images'],
     };
 }
 
