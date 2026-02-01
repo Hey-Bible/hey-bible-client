@@ -4,8 +4,8 @@
   "description": "Hey Bible App TypeScript client and examples",
   "main": "typescript/dist/index.js",
   "scripts": {
-    "gen:ts": "npx --yes @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./typescript --additional-properties=typescriptThreePlus=true,withInterfaces=true,npmName=hey-bible-client",
-    "postgen:ts": "sed -i '' 's/GIT_USER_ID/Hey-Bible/g' typescript/package.json && sed -i '' 's/GIT_REPO_ID/hey-bible-client/g' typescript/package.json",
+    "gen:ts": "npx --yes @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./typescript --additional-properties=typescriptThreePlus=true,withInterfaces=true,npmName=@hey-bible/client",
+    "postgen:ts": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('typescript/package.json')); pkg.repository = {type: 'git', url: 'https://github.com/Hey-Bible/hey-bible-client.git'}; pkg.publishConfig = {access: 'public'}; fs.writeFileSync('typescript/package.json', JSON.stringify(pkg, null, 2));\"",
     "build": "cd typescript && npm install && npm run build",
     "test": "cd typescript && npm test"
   },

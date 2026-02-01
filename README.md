@@ -6,7 +6,7 @@ A collection of auto-generated API clients for the Hey Bible App API in multiple
 
 | Language   | Directory      | Status | Package Name         |
 |------------|----------------|--------|---------------------|
-| TypeScript | `typescript/`  | ✅ Ready | `hey-bible-client`  |
+| TypeScript | `typescript/`  | ✅ Ready | `@hey-bible/client`  |
 
 ## 🚀 Quick Start
 
@@ -44,11 +44,16 @@ Use the following commands to generate clients for different languages:
 
 #### TypeScript (Fetch-based)
 ```bash
+npm run gen:ts
+```
+
+Or manually:
+```bash
 npx @openapitools/openapi-generator-cli generate \
   -i openapi.yaml \
   -g typescript-fetch \
   -o ./typescript \
-  --additional-properties=typescriptThreePlus=true,withInterfaces=true,npmName=hey-bible-client
+  --additional-properties=typescriptThreePlus=true,withInterfaces=true,npmName=@hey-bible/client
 ```
 
 #### Python
@@ -146,7 +151,33 @@ All clients require an API key for authentication. Get your API key from the Hey
    npm run build
    ```
 3. Test the changes
-4. Update version numbers and publish
+4. Release (see below)
+
+### Releasing to npm
+
+The TypeScript client is automatically published to npm when you push a version tag. The version number is extracted from the tag.
+
+```bash
+# 1. Regenerate the client
+npm run gen:ts
+
+# 2. Build to verify everything compiles
+npm run build
+
+# 3. Commit the generated files
+git add typescript/
+git commit -m "Regenerate client for v1.0.0"
+
+# 4. Tag and push
+git tag v1.0.0
+git push origin main --tags
+```
+
+The GitHub Actions workflow will:
+- Create a GitHub release with the OpenAPI spec
+- Publish `@hey-bible/client@1.0.5` to npm
+
+**Note:** You need an `NPM_TOKEN` secret configured in the repository settings.
 
 ### Adding a New Language
 
