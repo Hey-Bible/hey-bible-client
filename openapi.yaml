@@ -2,14 +2,89 @@ openapi: 3.0.0
 info:
   title: Hey Bible App API
   description: Public API for accessing Bible app data
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: https://api.heybible.app
     description: Production server
 tags:
   - name: HeyBible
-    description: Hey Bible App API endpoints for verses, notes, and images
+    description: Hey Bible App API endpoints for bibles, favorites, notes, images, chats, and tags
 paths:
+  /bibles:
+    get:
+      tags:
+        - HeyBible
+      summary: Get available Bibles
+      description: Retrieve Bible translations available to the user
+      responses:
+        '200':
+          description: Bibles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bibles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique Bible identifier
+                        name:
+                          type: string
+                          description: Full name (e.g. "English Standard Version")
+                        abbreviation:
+                          type: string
+                          description: Short code (e.g. "esv")
+                        description:
+                          type: string
+                        source:
+                          type: string
+                          enum:
+                            - private
+                            - api.bible
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '500':
+          description: Internal server error
+  /books:
+    get:
+      tags:
+        - HeyBible
+      summary: Get Bible books
+      description: Retrieve the list of Bible books with their codes and chapter counts
+      responses:
+        '200':
+          description: Books retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Display name (e.g. "Genesis")
+                        code:
+                          type: string
+                          description: 3-letter code (e.g. "GEN")
+                        chapters:
+                          type: integer
+                          description: Number of chapters in the book
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '500':
+          description: Internal server error
   /images:
     get:
       tags:
@@ -149,19 +224,102 @@ paths:
           description: Not found - note with specified ID not found
         '500':
           description: Internal server error
-  /verses:
+  /search:
     get:
       tags:
         - HeyBible
-      summary: Get verses
-      description: Retrieve all verses for the user, or a specific verse if ID is provided
+      summary: Search for verses
+      description: Search for Bible verses by book and chapter. Saves the result to the user's account. If start_verse and end_verse are omitted, returns the full chapter.
+      parameters:
+        - name: book
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Book name (e.g. "John", "Genesis", "1 Corinthians")
+        - name: chapter
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Chapter number
+        - name: start_verse
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Starting verse number (defaults to 1)
+        - name: end_verse
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Ending verse number (defaults to last verse in chapter)
+        - name: bible_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Bible translation ID (defaults to ESV). Use /bibles to get available IDs.
+      responses:
+        '200':
+          description: Verse retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verse:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      user_id:
+                        type: string
+                      bible_id:
+                        type: string
+                      book:
+                        type: string
+                      chapter:
+                        type: integer
+                      start_verse:
+                        type: integer
+                      end_verse:
+                        type: integer
+                      content:
+                        type: string
+                        description: HTML content with superscript verse numbers
+                      is_favorite:
+                        type: boolean
+                      created_at:
+                        type: string
+                        format: date-time
+                      last_updated:
+                        type: string
+                        format: date-time
+        '400':
+          description: Bad request - invalid book, chapter, or verse range
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '500':
+          description: Internal server error
+  /chats:
+    get:
+      tags:
+        - HeyBible
+      summary: Get chats
+      description: Retrieve the user's chat conversations with verse context. If ID is provided, returns a single chat with its messages.
       parameters:
         - name: id
           in: query
           required: false
           schema:
-            type: integer
-          description: Specific verse ID to retrieve
+            type: string
+            format: uuid
+          description: Specific chat ID to retrieve (returns full chat with messages)
         - name: limit
           in: query
           required: false
@@ -170,7 +328,7 @@ paths:
             default: 10
             minimum: 1
             maximum: 100
-          description: Number of verses to return (ignored if ID is specified)
+          description: Number of chats to return (ignored if ID is specified)
         - name: offset
           in: query
           required: false
@@ -178,16 +336,143 @@ paths:
             type: integer
             default: 0
             minimum: 0
-          description: Number of verses to skip (ignored if ID is specified)
+          description: Number of chats to skip (ignored if ID is specified)
       responses:
         '200':
-          description: Verses retrieved successfully
+          description: Chats retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: List response (no ID specified)
+                    properties:
+                      chats:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            title:
+                              type: string
+                              nullable: true
+                            model:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            last_message_at:
+                              type: string
+                              format: date-time
+                            verses:
+                              type: object
+                              properties:
+                                book:
+                                  type: string
+                                chapter:
+                                  type: integer
+                                start_verse:
+                                  type: integer
+                                end_verse:
+                                  type: integer
+                  - type: object
+                    description: Detail response (ID specified)
+                    properties:
+                      chat:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          title:
+                            type: string
+                            nullable: true
+                          model:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          last_message_at:
+                            type: string
+                            format: date-time
+                          verses:
+                            type: object
+                            properties:
+                              book:
+                                type: string
+                              chapter:
+                                type: integer
+                              start_verse:
+                                type: integer
+                              end_verse:
+                                type: integer
+                          chat_messages:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  format: uuid
+                                role:
+                                  type: string
+                                  enum:
+                                    - user
+                                    - assistant
+                                content:
+                                  type: string
+                                created_at:
+                                  type: string
+                                  format: date-time
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '404':
+          description: Not found - chat with specified ID not found
+        '500':
+          description: Internal server error
+  /favorites:
+    get:
+      tags:
+        - HeyBible
+      summary: Get favorite verses
+      description: Retrieve the user's favorited verses with notes, images, conversations, and tags. Optionally filter by tag name.
+      parameters:
+        - name: tag
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter favorites by tag name
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of favorites to return
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of favorites to skip
+      responses:
+        '200':
+          description: Favorites retrieved successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  verses:
+                  favorites:
                     type: array
                     items:
                       type: object
@@ -207,8 +492,6 @@ paths:
                           type: integer
                         end_verse:
                           type: integer
-                        is_favorite:
-                          type: boolean
                         last_updated:
                           type: string
                           format: date-time
@@ -235,36 +518,90 @@ paths:
                                 type: string
                                 format: date-time
                                 nullable: true
-                              user_id:
-                                type: string
                         images:
+                          type: array
+                          description: Image metadata (use /images?id= for signed URLs)
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              storage_path:
+                                type: string
+                              prompt:
+                                type: string
+                                nullable: true
+                              size:
+                                type: string
+                                nullable: true
+                              created_at:
+                                type: string
+                                format: date-time
+                        conversations:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              title:
+                                type: string
+                                nullable: true
+                              model:
+                                type: string
+                              last_message_at:
+                                type: string
+                                format: date-time
+                        tags:
                           type: array
                           items:
                             type: object
                             properties:
                               id:
                                 type: integer
-                              size:
+                              name:
                                 type: string
-                                nullable: true
-                              prompt:
-                                type: string
-                                nullable: true
-                              user_id:
-                                type: string
-                              verse_id:
-                                type: integer
-                              created_at:
-                                type: string
-                                format: date-time
-                              storage_path:
+                              color:
                                 type: string
         '400':
           description: Bad request
         '401':
           description: Unauthorized - invalid or expired API key
-        '404':
-          description: Not found - verse with specified ID not found
+        '500':
+          description: Internal server error
+  /tags:
+    get:
+      tags:
+        - HeyBible
+      summary: Get tags
+      description: Retrieve all tags defined by the user
+      responses:
+        '200':
+          description: Tags retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        color:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - invalid or expired API key
         '500':
           description: Internal server error
 components:

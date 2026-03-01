@@ -16,59 +16,53 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface NotesGet200ResponseNotesInner
+ * @interface FavoritesGet200ResponseFavoritesInnerNotesInner
  */
-export interface NotesGet200ResponseNotesInner {
+export interface FavoritesGet200ResponseFavoritesInnerNotesInner {
     /**
      * 
      * @type {number}
-     * @memberof NotesGet200ResponseNotesInner
+     * @memberof FavoritesGet200ResponseFavoritesInnerNotesInner
      */
     id?: number;
     /**
      * 
      * @type {number}
-     * @memberof NotesGet200ResponseNotesInner
+     * @memberof FavoritesGet200ResponseFavoritesInnerNotesInner
      */
     verseId?: number;
     /**
      * 
      * @type {string}
-     * @memberof NotesGet200ResponseNotesInner
+     * @memberof FavoritesGet200ResponseFavoritesInnerNotesInner
      */
     content?: string;
     /**
      * 
      * @type {Date}
-     * @memberof NotesGet200ResponseNotesInner
+     * @memberof FavoritesGet200ResponseFavoritesInnerNotesInner
      */
     createdAt?: Date | null;
     /**
      * 
      * @type {Date}
-     * @memberof NotesGet200ResponseNotesInner
+     * @memberof FavoritesGet200ResponseFavoritesInnerNotesInner
      */
     lastModified?: Date | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotesGet200ResponseNotesInner
-     */
-    userId?: string;
 }
 
 /**
- * Check if a given object implements the NotesGet200ResponseNotesInner interface.
+ * Check if a given object implements the FavoritesGet200ResponseFavoritesInnerNotesInner interface.
  */
-export function instanceOfNotesGet200ResponseNotesInner(value: object): value is NotesGet200ResponseNotesInner {
+export function instanceOfFavoritesGet200ResponseFavoritesInnerNotesInner(value: object): value is FavoritesGet200ResponseFavoritesInnerNotesInner {
     return true;
 }
 
-export function NotesGet200ResponseNotesInnerFromJSON(json: any): NotesGet200ResponseNotesInner {
-    return NotesGet200ResponseNotesInnerFromJSONTyped(json, false);
+export function FavoritesGet200ResponseFavoritesInnerNotesInnerFromJSON(json: any): FavoritesGet200ResponseFavoritesInnerNotesInner {
+    return FavoritesGet200ResponseFavoritesInnerNotesInnerFromJSONTyped(json, false);
 }
 
-export function NotesGet200ResponseNotesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): NotesGet200ResponseNotesInner {
+export function FavoritesGet200ResponseFavoritesInnerNotesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): FavoritesGet200ResponseFavoritesInnerNotesInner {
     if (json == null) {
         return json;
     }
@@ -79,15 +73,14 @@ export function NotesGet200ResponseNotesInnerFromJSONTyped(json: any, ignoreDisc
         'content': json['content'] == null ? undefined : json['content'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'lastModified': json['last_modified'] == null ? undefined : (new Date(json['last_modified'])),
-        'userId': json['user_id'] == null ? undefined : json['user_id'],
     };
 }
 
-export function NotesGet200ResponseNotesInnerToJSON(json: any): NotesGet200ResponseNotesInner {
-    return NotesGet200ResponseNotesInnerToJSONTyped(json, false);
+export function FavoritesGet200ResponseFavoritesInnerNotesInnerToJSON(json: any): FavoritesGet200ResponseFavoritesInnerNotesInner {
+    return FavoritesGet200ResponseFavoritesInnerNotesInnerToJSONTyped(json, false);
 }
 
-export function NotesGet200ResponseNotesInnerToJSONTyped(value?: NotesGet200ResponseNotesInner | null, ignoreDiscriminator: boolean = false): any {
+export function FavoritesGet200ResponseFavoritesInnerNotesInnerToJSONTyped(value?: FavoritesGet200ResponseFavoritesInnerNotesInner | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -99,7 +92,6 @@ export function NotesGet200ResponseNotesInnerToJSONTyped(value?: NotesGet200Resp
         'content': value['content'],
         'created_at': value['createdAt'] === null ? null : ((value['createdAt'] as any)?.toISOString()),
         'last_modified': value['lastModified'] === null ? null : ((value['lastModified'] as any)?.toISOString()),
-        'user_id': value['userId'],
     };
 }
 
