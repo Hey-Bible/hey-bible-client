@@ -1,6 +1,6 @@
 # Hey Bible App API Clients
 
-A collection of auto-generated API clients for the Hey Bible App API in multiple programming languages. These clients provide easy access to Bible verses, notes, and images through type-safe interfaces.
+A collection of auto-generated API clients for the Hey Bible App API in multiple programming languages. These clients provide easy access to Bible translations, verses, favorites, notes, images, chats, and tags through type-safe interfaces.
 
 ## 🌍 Available Clients
 
@@ -107,24 +107,41 @@ See the README in each language's directory for specific installation instructio
 
 ## 📖 API Documentation
 
-The clients provide access to three main endpoints:
+The clients provide access to the following endpoints:
 
-### 🙏 Verses
-- Get all verses with pagination
-- Get a specific verse by ID
-- Includes associated notes and images
+### 📖 Bibles
+- Get available Bible translations (ESV, KJV, etc.)
+
+### 📚 Books
+- Get the list of Bible books with 3-letter codes and chapter counts
+
+### 🔍 Search
+- Search for verses by book, chapter, and verse range
+- Saves results to the user's account
+- Supports specifying a Bible translation
+
+### ⭐ Favorites
+- Get favorited verses with pagination
+- Filter by tag name
+- Includes associated notes, images, conversations, and tags
 
 ### 📝 Notes
 - Get all notes with pagination
 - Get a specific note by ID
-- Includes associated verse information
 
 ### 🖼️ Images
 - Get all images with pagination
 - Get a specific image by ID (with signed URL)
-- Includes associated verse information
 
-For detailed API documentation, see the [OpenAPI specification](openapi.yaml).
+### 💬 Chats
+- Get chat conversations with pagination
+- Get a specific chat by ID with full message history
+- Includes verse context
+
+### 🏷️ Tags
+- Get all user-defined tags (for filtering favorites)
+
+For detailed API documentation, see the [OpenAPI specification](openapi.yaml) or visit [docs.heybible.app/api](https://docs.heybible.app/api).
 
 ## 🔑 Authentication
 
