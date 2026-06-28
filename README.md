@@ -1,3 +1,7 @@
+<p align="center">
+  <img alt="Hey Bible" src="assets/og-image.png" width="1200" />
+</p>
+
 # Hey Bible App API Clients
 
 A collection of auto-generated API clients for the Hey Bible App API in multiple programming languages. These clients provide easy access to Bible translations, verses, favorites, notes, images, chats, and tags through type-safe interfaces.
