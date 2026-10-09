@@ -157,6 +157,72 @@ paths:
           description: Not found - image with specified ID not found
         '500':
           description: Internal server error
+    post:
+      tags:
+        - HeyBible
+      summary: Generate a verse image
+      description: |
+        Generate an image for a verse and store it on the API key owner's account.
+        Charges credits the same way the app does. Pass verse_id, or book and chapter
+        (optional start_verse, end_verse, bible_id) to resolve the verse first.
+        theme is one of animals, celestial, custom, fantasy, flowers, landscape,
+        literal, medieval, minimalist, stained_glass, watercolor. custom requires theme_content.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book:
+                  type: string
+                chapter:
+                  type: integer
+                start_verse:
+                  type: integer
+                end_verse:
+                  type: integer
+                bible_id:
+                  type: string
+                verse_id:
+                  type: integer
+                quote:
+                  type: string
+                source:
+                  type: string
+                theme:
+                  type: string
+                  default: landscape
+                theme_content:
+                  type: string
+                size:
+                  type: string
+                  enum: [portrait, square, landscape]
+                  default: square
+                model:
+                  type: string
+                copyright:
+                  type: string
+      responses:
+        '200':
+          description: Image generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image:
+                    type: object
+                  credits_charged:
+                    type: integer
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '402':
+          description: Insufficient credits
+        '500':
+          description: Internal server error
   /notes:
     get:
       tags:
