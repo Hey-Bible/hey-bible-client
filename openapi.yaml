@@ -10,6 +10,37 @@ tags:
   - name: HeyBible
     description: Hey Bible App API endpoints for bibles, favorites, notes, images, chats, and tags
 paths:
+  /credits:
+    get:
+      tags:
+        - HeyBible
+      summary: Get credit balance
+      description: Credit balance for the API key owner, plus the credit cost of each active image model.
+      responses:
+        '200':
+          description: Balance retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+                  image_models:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        cost_credits:
+                          type: integer
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
   /bibles:
     get:
       tags:
