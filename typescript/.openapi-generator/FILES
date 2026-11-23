@@ -5,6 +5,7 @@ package.json
 src/apis/HeyBibleApi.ts
 src/apis/index.ts
 src/index.ts
+src/models/ApiError.ts
 src/models/BiblesGet200Response.ts
 src/models/BiblesGet200ResponseBiblesInner.ts
 src/models/BooksGet200Response.ts
@@ -22,6 +23,9 @@ src/models/FavoritesGet200ResponseFavoritesInnerConversationsInner.ts
 src/models/FavoritesGet200ResponseFavoritesInnerImagesInner.ts
 src/models/FavoritesGet200ResponseFavoritesInnerNotesInner.ts
 src/models/FavoritesGet200ResponseFavoritesInnerTagsInner.ts
+src/models/GenerateImageRequest.ts
+src/models/GenerateImageResponse.ts
+src/models/GeneratedImage.ts
 src/models/ImagesGet200Response.ts
 src/models/ImagesGet200ResponseImagesInner.ts
 src/models/NotesGet200Response.ts

@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './ApiError';
 export * from './BiblesGet200Response';
 export * from './BiblesGet200ResponseBiblesInner';
 export * from './BooksGet200Response';
@@ -17,6 +18,9 @@ export * from './FavoritesGet200ResponseFavoritesInnerConversationsInner';
 export * from './FavoritesGet200ResponseFavoritesInnerImagesInner';
 export * from './FavoritesGet200ResponseFavoritesInnerNotesInner';
 export * from './FavoritesGet200ResponseFavoritesInnerTagsInner';
+export * from './GenerateImageRequest';
+export * from './GenerateImageResponse';
+export * from './GeneratedImage';
 export * from './ImagesGet200Response';
 export * from './ImagesGet200ResponseImagesInner';
 export * from './NotesGet200Response';

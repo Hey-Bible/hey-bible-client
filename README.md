@@ -136,6 +136,7 @@ The clients provide access to the following endpoints:
 ### 🖼️ Images
 - Get all images with pagination
 - Get a specific image by ID (with signed URL)
+- Generate a new verse image (`POST /images`). This spends the account's credits. It returns 400 for bad input and 402 when the account does not have enough credits.
 
 ### 💬 Chats
 - Get chat conversations with pagination
@@ -171,7 +172,11 @@ All clients require an API key for authentication. Get your API key from the Hey
    npm run gen:ts
    npm run build
    ```
-3. Test the changes
+3. Test the changes:
+   ```bash
+   npm test
+   ```
+   The tests build the client and call it with a fake `fetch`, so they never reach the real API.
 4. Release (see below)
 
 ### Releasing to npm
