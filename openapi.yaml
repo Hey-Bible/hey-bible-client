@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Hey Bible App API
   description: Public API for accessing Bible app data
-  version: 1.1.0
+  version: 1.2.0
 servers:
   - url: https://api.heybible.app
     description: Production server
@@ -155,6 +155,47 @@ paths:
           description: Unauthorized - invalid or expired API key
         '404':
           description: Not found - image with specified ID not found
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - HeyBible
+      operationId: imagesPost
+      summary: Generate a verse image
+      description: |
+        Draw a picture for a verse and save it to the API key owner's account,
+        the same way the app does. This spends the account's credits; the cost
+        depends on the model. If drawing fails after the credits are taken, they
+        are refunded.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateImageRequest'
+      responses:
+        '200':
+          description: Image generated and saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateImageResponse'
+        '400':
+          description: Bad request - for example no verse named, an unknown theme, a custom theme without theme_content, an unknown model, a size the model does not support, or a quote that is too long
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized - invalid or expired API key
+        '402':
+          description: Payment required - the account does not have enough credits for this model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not found - verse_id is not one of this account's verses
         '500':
           description: Internal server error
   /notes:
@@ -610,5 +651,126 @@ components:
       type: apiKey
       in: header
       name: X-Hey-Bible-Api-Key
+  schemas:
+    GenerateImageRequest:
+      type: object
+      description: |
+        Name the verse with verse_id, or with book and chapter (plus optional
+        start_verse, end_verse and bible_id). One of the two is required.
+      properties:
+        verse_id:
+          type: integer
+          description: ID of a verse already saved to this account. When set, the book, chapter, verse and bible fields are ignored.
+        book:
+          type: string
+          description: Book name (e.g. "Isaiah", "1 Corinthians"). Required with chapter when verse_id is not set.
+        chapter:
+          type: integer
+          minimum: 1
+          description: Chapter number. Required with book when verse_id is not set.
+        start_verse:
+          type: integer
+          minimum: 1
+          description: First verse of the passage
+        end_verse:
+          type: integer
+          minimum: 1
+          description: Last verse of the passage. Defaults to start_verse, so one verse is drawn when only start_verse is set.
+        bible_id:
+          type: string
+          description: Bible translation ID. Use GET /bibles to list them. Defaults to the API's default translation.
+        theme:
+          type: string
+          enum:
+            - hey_bible
+            - animals
+            - celestial
+            - custom
+            - fantasy
+            - flowers
+            - landscape
+            - literal
+            - medieval
+            - minimalist
+            - stained_glass
+            - watercolor
+          default: hey_bible
+          description: Picture style. custom draws the prompt in theme_content.
+        theme_content:
+          type: string
+          description: The picture to draw. Required when theme is custom.
+        size:
+          type: string
+          enum:
+            - portrait
+            - square
+            - landscape
+          default: square
+          description: Image shape. portrait is 9:16, square is 1:1 and landscape is 16:9.
+        model:
+          type: string
+          description: Image model ID (e.g. "flux-2-pro"). Defaults to the app's default model. Models cost different numbers of credits.
+        quote:
+          type: string
+          description: Text printed on the picture. Defaults to the verse text. At most 40 words for square and 70 words for portrait or landscape.
+        source:
+          type: string
+          description: Citation printed under the quote. Defaults to the verse reference.
+        copyright:
+          type: string
+          description: Copyright line for the picture. Ignored when the translation has its own copyright line.
+    GeneratedImage:
+      type: object
+      properties:
+        id:
+          type: integer
+        verse_id:
+          type: integer
+        storage_path:
+          type: string
+        signed_url:
+          type: string
+          nullable: true
+          description: Link to the image, valid for 24 hours. Null when the link could not be signed; fetch the image with GET /images?id= instead of generating it again.
+        signed_url_error:
+          type: string
+          description: Set only when signed_url is null. Explains how to fetch the image that was created.
+        prompt:
+          type: string
+          nullable: true
+        size:
+          type: string
+          nullable: true
+        model:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        quote:
+          type: string
+        source:
+          type: string
+        copyright:
+          type: string
+          nullable: true
+        fums_token:
+          type: string
+          nullable: true
+          description: API.Bible usage token for licensed translations
+    GenerateImageResponse:
+      type: object
+      properties:
+        image:
+          $ref: '#/components/schemas/GeneratedImage'
+        credits_charged:
+          type: integer
+          description: Credits taken from the account for this image
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: What went wrong
 security:
   - ApiKeyAuth: []
